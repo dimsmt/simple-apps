@@ -31,8 +31,8 @@ pipeline {
         stage('Push and Clean Images') {
             steps {
                 sh '''
-                docker tag simple-apps-pipeline dtosc/simple-apps-pipeline
-                docker push dtosc/simple-apps-pipeline
+                docker tag simple-apps-pipeline-apps dtosc/simple-apps-pipeline-apps
+                docker push dtosc/simple-apps-pipeline-apps
                 docker image prune -a -f
                 '''
             }
