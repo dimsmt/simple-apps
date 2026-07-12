@@ -28,7 +28,7 @@ pipeline {
                 '''
             }
         }
-        stage('Deploy compose') {
+        stage('Push and Clean Images') {
             steps {
                 sh '''
                 docker tag simple-apps-pipeline dtosc/simple-apps-pipeline
