@@ -1,8 +1,13 @@
 pipeline {
     agent { label 'docker-server1' }
-    
     tools {nodejs "NodeJS-18-16-0"}
 
+environment {
+    NAMEAPPS = 'simple-apps-pipeline-apps'
+    SONARHOST = 'http://172.23.11.115:9000/' 
+    TOKENSONAR = 'sqp_968e23faac3944b09522fe8a2294813537747870'
+    CTREG = 'dtosc'
+} 
     stages {
         stage('Build') {
             steps {
@@ -16,8 +21,8 @@ pipeline {
                 sonar-scanner \
                 -Dsonar.projectKey=simple-apps \
                 -Dsonar.sources=. \
-                -Dsonar.host.url=http://172.23.11.115:9000/ \
-                -Dsonar.token=sqp_968e23faac3944b09522fe8a2294813537747870'''
+                -Dsonar.host.url=${SONARHOST} \
+                -Dsonar.token=${TOKENSONAR}'''
             }
         }
         stage('Deploy compose') {
@@ -31,8 +36,8 @@ pipeline {
         stage('Push and Clean Images') {
             steps {
                 sh '''
-                docker tag simple-apps-pipeline-apps dtosc/simple-apps-pipeline-apps
-                docker push dtosc/simple-apps-pipeline-apps
+                docker tag ${NAMEAPPS} ${CTREG}/${NAMEAPPS}
+                docker push ${CTREG}/${NAMEAPPS}
                 docker image prune -a -f
                 '''
             }
